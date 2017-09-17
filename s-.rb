@@ -36,7 +36,7 @@ module Ssub
         when :octal   then raw
         when :digit   then raw[1..-1]
         when :hex     then 'xX'.include?(raw[0]) ? "0#{raw}" : "0x#{raw}"
-        when :ident   then raw
+        when :ident   then raw[0] == '[' ? raw[1..-2] : raw
         when :string  then strings.push [sid += 1, raw]; "$s#{sid}"
         when :raw     then raw
         end
