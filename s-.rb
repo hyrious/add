@@ -18,6 +18,7 @@ module Ssub
       when raw = line.slice!(/^\w+|\[\w+\]/)       then ans.push [:ident  , raw]
       when raw = line.slice!(/^"([^"]|\\\")+"/)    then ans.push [:string , raw]
       when raw = line.slice!(/^\s+/)
+      when raw = line.slice!(/^\S+/)               then ans.push [:raw    , raw]
       end
     end
     ans
@@ -30,13 +31,14 @@ module Ssub
       comment = nil
       ans = '.byte ' + l.map do |type, raw|
         case type
-        when :comment then comment = raw; nil
+        when :comment then comment = raw.sub(';', '#'); nil
         when :binary  then raw
         when :octal   then raw
         when :digit   then raw[1..-1]
         when :hex     then 'xX'.include?(raw[0]) ? "0#{raw}" : "0x#{raw}"
         when :ident   then raw
         when :string  then strings.push [sid += 1, raw]; "$s#{sid}"
+        when :raw     then raw
         end
       end.compact.join(',')
       max_width = ans.length if max_width < ans.length
@@ -49,24 +51,23 @@ module Ssub
       text += <<~EOD
 
         .data
-        #{strings.map { |i, s| "  s#{i}: #{s}" }.join("\n")}
+        #{strings.map { |i, s| "  s#{i}: .asciz #{s}" }.join("\n")}
       EOD
     end
     text
   end
 end
 
-require 'ap'
-puts Ssub.gas Ssub.lex <<-EOF
-; comments (use AT&T syntax because it's
-; order is the same as machine code)
-55                    ; push %ebp
-89 0345               ; mov  %esp,%ebp
-68 "Hello world\\n\\0"  ; push str
-e8 _puts              ; call _puts
-83 0304 4             ; add  $4  ,%esp
-31 0300               ; xor  %eax,%eax
-83 0300 d42           ; add  $42 ,%eax
-c9                    ; leave
-c3                    ; ret
-EOF
+# puts Ssub.gas Ssub.lex <<-EOF
+# ; comments (use AT&T syntax because it's
+# ; order is the same as machine code)
+# 55                    ; push %ebp
+# 89 0345               ; mov  %esp,%ebp
+# 68 "Hello world\\n\\0"  ; push str
+# e8 _puts              ; call _puts
+# 83 0304 4             ; add  $4  ,%esp
+# 31 0300               ; xor  %eax,%eax
+# 83 0300 d42           ; add  $42 ,%eax
+# c9                    ; leave
+# c3                    ; ret
+# EOF
