@@ -36,7 +36,7 @@ module Ssub
         when :digit   then raw[1..-1]
         when :hex     then 'xX'.include?(raw[0]) ? "0#{raw}" : "0x#{raw}"
         when :ident   then raw
-        when :string  then strings.push [sid += 1, raw]; "s#{sid}"
+        when :string  then strings.push [sid += 1, raw]; "$s#{sid}"
         end
       end.compact.join(',')
       max_width = ans.length if max_width < ans.length
@@ -56,17 +56,17 @@ module Ssub
   end
 end
 
-# require 'ap'
-# puts Ssub.gas Ssub.lex <<-EOF
-# ; comments (use AT&T syntax because it's
-# ; order is the same as machine code)
-# 55                    ; push %ebp
-# 89 0345               ; mov  %esp,%ebp
-# 68 "Hello world\\n\\0"  ; push str
-# e8 _puts              ; call _puts
-# 83 0304 4             ; add  $4  ,%esp
-# 31 0300               ; xor  %eax,%eax
-# 83 0300 d42           ; add  $42 ,%eax
-# c9                    ; leave
-# c3                    ; ret
-# EOF
+require 'ap'
+puts Ssub.gas Ssub.lex <<-EOF
+; comments (use AT&T syntax because it's
+; order is the same as machine code)
+55                    ; push %ebp
+89 0345               ; mov  %esp,%ebp
+68 "Hello world\\n\\0"  ; push str
+e8 _puts              ; call _puts
+83 0304 4             ; add  $4  ,%esp
+31 0300               ; xor  %eax,%eax
+83 0300 d42           ; add  $42 ,%eax
+c9                    ; leave
+c3                    ; ret
+EOF
