@@ -1,4 +1,4 @@
-module Ssub
+module Sdec
   module_function
   def lex str
     str.lines.map { |l| scan l.chomp }.delete_if &:empty?
@@ -47,8 +47,8 @@ module Ssub
           when :raw     then raw
           end
         end.compact.join(',')
+        max_width = ans.length if max_width < ans.length
       end
-      max_width = ans.length if max_width < ans.length
       [ans, comment]
     end.map do |ans, comment|
       ans = format("%-#{max_width+1}s", ans)
@@ -65,16 +65,16 @@ module Ssub
   end
 end
 
-# puts Ssub.gas Ssub.lex <<-EOF
-# ; comments (use AT&T syntax because it's
-# ; order is the same as machine code)
-# 55                    ; push %ebp
-# 89 0345               ; mov  %esp,%ebp
-# 68 "Hello world\\n\\0"  ; push str
-# e8 _puts              ; call _puts
-# 83 0304 4             ; add  $4  ,%esp
-# 31 0300               ; xor  %eax,%eax
-# 83 0300 d42           ; add  $42 ,%eax
-# c9                    ; leave
-# c3                    ; ret
-# EOF
+puts Sdec.gas Sdec.lex <<-EOF
+; comments (use AT&T syntax because it's
+; order is the same as machine code)
+55                    ; push %ebp
+89 0345               ; mov  %esp,%ebp
+68 "Hello world\\n"   ; push str
+e8 _puts              ; call _puts
+83 0304 4             ; add  $4  ,%esp
+31 0300               ; xor  %eax,%eax
+83 0300 d42           ; add  $42 ,%eax
+c9                    ; leave
+c3                    ; ret
+EOF
