@@ -29,18 +29,25 @@ module Ssub
     max_width = 0
     text = ".text\n.global _main\n_main:\n" + lexed.map do |l|
       comment = nil
-      ans = '.byte ' + l.map do |type, raw|
-        case type
-        when :comment then comment = raw.sub(';', '#'); nil
-        when :binary  then raw
-        when :octal   then raw
-        when :digit   then raw[1..-1]
-        when :hex     then 'xX'.include?(raw[0]) ? "0#{raw}" : "0x#{raw}"
-        when :ident   then raw[0] == '[' ? raw[1..-2] : raw
-        when :string  then strings.push [sid += 1, raw]; "$s#{sid}"
-        when :raw     then raw
-        end
-      end.compact.join(',')
+      case l[0][0]
+      when :comment
+        ans = l[0][1].sub(';', '#')
+      when :raw
+        ans = l[0][1]
+      else
+        ans = '.byte ' + l.map do |type, raw|
+          case type
+          when :comment then comment = raw.sub(';', '#'); nil
+          when :binary  then raw
+          when :octal   then raw
+          when :digit   then raw[1..-1]
+          when :hex     then 'xX'.include?(raw[0]) ? "0#{raw}" : "0x#{raw}"
+          when :ident   then raw[0] == '[' ? raw[1..-2] : raw
+          when :string  then strings.push [sid += 1, raw]; "$s#{sid}"
+          when :raw     then raw
+          end
+        end.compact.join(',')
+      end
       max_width = ans.length if max_width < ans.length
       [ans, comment]
     end.map do |ans, comment|

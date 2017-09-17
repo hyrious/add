@@ -50,7 +50,7 @@ Just for fun(?!)
 Seriously, it's aimed to prove that machine code is
 able to be read and to be written by hand, just need some formula (spell?).
 
-For example, if we remember **ACDBSBSI** (and give them numbers 0-7).
+For example, if we remember **ACDBSBSD** (and give them numbers 0-7).
 Then if we know that `push reg = 0x50 + reg`, we can *immediately* write
 down `0x55`, which is `push %ebp` (ACDBS**B**SI, the e**b**p was given **5**).
 
