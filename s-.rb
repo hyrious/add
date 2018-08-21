@@ -1,3 +1,10 @@
+# Comments  -> ';' (!EndOfLine .)+ EndOfLine
+# EndOfLine -> '\n' | '\r\n' | '\r'
+# Hex       -> [0-9a-fA-F] | [1-9a-fA-F] [0-9a-fA-F]+ | [xX] [0-9a-fA-F]+
+# Octal     -> 0[0-3][0-7][0-7] | [oO] [0-7]+
+# Digit     -> [dD] [0-9]+
+# Binary    -> [bB] [01]+ 
+# Ident     -> [_a-zA-Z] [0-9a-zA-Z]+ | '[' [0-9a-zA-Z]+ ']'
 module Sdec
   module_function
   def lex str
@@ -78,3 +85,20 @@ e8 _puts              ; call _puts
 c9                    ; leave
 c3                    ; ret
 EOF
+# =>
+# .text
+# .global _main
+# _main:
+#   # comments (use AT&T syntax because it's
+#   # order is the same as machine code)
+#   .byte 0x55          # push %ebp
+#   .byte 0x89,0345     # mov  %esp,%ebp
+#   .byte 0x68,$s1      # push str
+#   .byte 0xe8,_puts    # call _puts
+#   .byte 0x83,0304,0x4 # add  $4  ,%esp
+#   .byte 0x31,0300     # xor  %eax,%eax
+#   .byte 0x83,0300,42  # add  $42 ,%eax
+#   .byte 0xc9          # leave
+#   .byte 0xc3          # ret
+# .data
+#   s1: .asciz "Hello world\n"
