@@ -2,6 +2,81 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width initial-scale=1">
-<title>A--: ASM dec dec</title>
+<title>A--: a lower way of writing assembly code</title>
+<style>
+    :root {
+        --c1: #f1f0ed;
+        --c2: #ccccd6;
+        --c3: #61649f;
+        --c4: #2e317c;
+        --c5: #1f2040;
+        --c6: #131124;
+        --c7: #0f1423;
+    }
+    .dark-mode {
+        --c1: #0f1423;
+        --c2: #131124;
+        --c3: #1f2040;
+        --c4: #2e317c;
+        --c5: #61649f;
+        --c6: #ccccd6;
+        --c7: #f1f0ed;
+    }
+    body {
+        margin: 0;
+        border-top: 2px solid var(--c6);
+        font-family: monospace, monospace;
+        color: var(--c6);
+        background-color: var(--c1);
+    }
+    article {
+        margin: 1em auto;
+        max-width: 1024px;
+    }
+    h1, h2, h3, h4 {
+        font-weight: normal;
+        color: var(--c7);
+    }
+    h1, h2, h3, h4, p {
+        margin: 1rem;
+    }
+    .DarkButton {
+        position: absolute;
+        left: -0.5em;
+        top: -1em;
+        padding: 0 .5em;
+        transform-origin: bottom left;
+        transform: rotate(90deg);
+        background: var(--c6);
+        color: var(--c1);
+        user-select: none;
+        transition: all 200ms ease;
+        transition-property: top, left, padding;
+    }
+    .DarkButton:hover {
+        top: -2em;
+        left: 0;
+        padding: .5em .5em;
+    }
+</style>
 <body>
-  <a href="/README">README</a>
+    <span class="DarkButton">
+        DarkMode
+    </span>
+    <article>
+        <h1>A--: a lower way of writing assembly code</h1>
+        
+    </article>
+    <script>
+        ;(function() {
+            'use strict';
+            function $(sel) {
+                return document.querySelector(sel);
+            }
+            $('.DarkButton').addEventListener('click', function (e) {
+                var isDark = document.body.classList.toggle('dark-mode');
+                this.textContent = isDark ? 'LightMode' : 'DarkMode';
+            }, false);
+        })();
+    </script>
+</body>
