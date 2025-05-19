@@ -24,7 +24,7 @@ I will recommend you to have a look at (9.45M)
 
 ## Ref.
 
-- ~~(中文) [mouseos/x64](http://www.mouseos.com/x64)~~ (404 now)
+- (中文) [mouseos/x64](https://web.archive.org/web/20171007052840/http://www.mouseos.com/) (web archive)
 - [x86 Assembly Guide][2]
 - [x86 Instruction Set Reference][3]
 - [325383][0]
